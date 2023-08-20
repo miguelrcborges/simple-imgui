@@ -3,6 +3,7 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_shape.h>
 #include <SDL2/SDL_video.h>
+#include <SDL2/SDL_events.h>
 
 #include "s-imgui.h"
 
@@ -11,11 +12,6 @@ int main(int argc, char **argv) {
 		SDL_Log("Failed to initialize SDL.");
 		return 1;
 	}
-
-	if (simgui_init() != 0) {
-		SDL_Log("Failed to initialize s-imgui.");
-		return 1;
-	} 
 
 	SDL_Window *win = SDL_CreateWindow(
 		"demo",
@@ -32,12 +28,23 @@ int main(int argc, char **argv) {
 		SDL_RENDERER_PRESENTVSYNC
 	);
 
-	ButtonHandle a = simgui_allocButton();
-	ButtonHandle b = simgui_allocButton();
-	ButtonHandle c = simgui_allocButton();
-	simgui_freeButton(a);
-	ButtonHandle d = simgui_allocButton();
-	SDL_Log("%lu %lu %lu %lu", a.n, b.n, c.n, d.n);
+	simgui_SetRenderer(win, ren);
+
+	SDL_Rect b1 = (SDL_Rect){
+		.x = 300,
+		.y = 600,
+		.w = 200,
+		.h = 100,
+	};
+
+	SDL_Rect b2 = (SDL_Rect){
+		.x = 700,
+		.y = 600,
+		.w = 200,
+		.h = 100,
+	};
+
+	int b1_presses = 0, b2_presses = 0;
 
 	while (1) {
 		SDL_Event e;
@@ -45,10 +52,22 @@ int main(int argc, char **argv) {
 			if (e.type == SDL_QUIT) {
 				goto end;
 			}
+			simgui_ProcessEvent(&e);
 		}
 
 		SDL_SetRenderDrawColor(ren, 0x16, 0x16, 0x16, 0xff);
 		SDL_RenderClear(ren);
+
+		simgui_Prepare();
+
+		if (simgui_Button(&b1))
+			SDL_Log("The button 1 was pressed %d times.\n", ++b1_presses);
+
+		if (simgui_Button(&b2))
+			SDL_Log("The button 2 was pressed %d times.\n", ++b2_presses);
+
+		simgui_End();
+
 		SDL_RenderPresent(ren);
 	}
 
