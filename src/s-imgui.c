@@ -53,10 +53,10 @@ void simgui_ProcessEvent(SDL_Event *e) {
 
 int simgui_ButtonID(int id, SDL_Rect *r) {
 	if (
-			r->x < mouse_x &&
-			r->x + r->w > mouse_x &&
-			r->y < mouse_y &&
-			r->y + r->h > mouse_y
+		r->x < mouse_x &&
+		r->x + r->w > mouse_x &&
+		r->y < mouse_y &&
+		r->y + r->h > mouse_y
 	) {
 		hot_item = id;
 		if (mouse_down && active_item == 0)
