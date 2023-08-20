@@ -12,10 +12,6 @@
 extern "C" {
 #endif
 
-typedef struct _ButtonHandle {
-	unsigned long n;
-} ButtonHandle;
-
 extern void simgui_Prepare(void);
 extern void simgui_End(void);
 extern void simgui_SetRenderer(SDL_Window *win, SDL_Renderer *ren);
